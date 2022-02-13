@@ -1,0 +1,9 @@
+cmake_minimum_required(VERSION 3.10)
+
+#set(CMAKE_CXX_STANDARD 17)
+#set(CMAKE_C_STANDARD 17)
+
+file(GLOB IMGUI_SOURCE_FILES ${PROJECT_VENDOR}/imgui/*.cpp ${PROJECT_VENDOR}/imgui/*.c)
+file(GLOB IMGUI_HEADER_FILES ${PROJECT_VENDOR}/imgui/*.hpp ${PROJECT_VENDOR}/imgui/*.h)
+
+add_library(ImGui ${IMGUI_SOURCE_FILES} ${IMGUI_HEADER_FILES})
