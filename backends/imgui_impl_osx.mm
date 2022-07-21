@@ -63,23 +63,23 @@
 // Data
 struct ImGui_ImplOSX_Data
 {
-    CFTimeInterval          Time;
-    NSCursor*               MouseCursors[ImGuiMouseCursor_COUNT];
-    bool                    MouseCursorHidden;
-    ImGuiObserver*          Observer;
-    KeyEventResponder*      KeyEventResponder;
-    NSTextInputContext*     InputContext;
-    id                      Monitor;
-    NSWindow*               Window;
+    CFTimeInterval              Time;
+    NSCursor*                   MouseCursors[ImGuiMouseCursor_COUNT];
+    bool                        MouseCursorHidden;
+    ImGuiObserver*              Observer;
+    KeyEventResponder*          KeyEventResponder;
+    NSTextInputContext*         InputContext;
+    id                          Monitor;
+    NSWindow*                   Window;
 
-    ImGui_ImplOSX_Data()    { memset(this, 0, sizeof(*this)); }
+    ImGui_ImplOSX_Data()        { memset(this, 0, sizeof(*this)); }
 };
 
-static ImGui_ImplOSX_Data*  ImGui_ImplOSX_CreateBackendData()  { return IM_NEW(ImGui_ImplOSX_Data)(); }
-static ImGui_ImplOSX_Data*  ImGui_ImplOSX_GetBackendData()     { return (ImGui_ImplOSX_Data*)ImGui::GetIO().BackendPlatformUserData; }
-static void                 ImGui_ImplOSX_DestroyBackendData() { IM_DELETE(ImGui_ImplOSX_GetBackendData()); }
+static ImGui_ImplOSX_Data*      ImGui_ImplOSX_CreateBackendData()   { return IM_NEW(ImGui_ImplOSX_Data)(); }
+static ImGui_ImplOSX_Data*      ImGui_ImplOSX_GetBackendData()      { return (ImGui_ImplOSX_Data*)ImGui::GetIO().BackendPlatformUserData; }
+static void                     ImGui_ImplOSX_DestroyBackendData()  { IM_DELETE(ImGui_ImplOSX_GetBackendData()); }
 
-static inline CFTimeInterval GetMachAbsoluteTimeInSeconds()    { return static_cast<CFTimeInterval>(static_cast<double>(clock_gettime_nsec_np(CLOCK_UPTIME_RAW)) / 1e9); }
+static inline CFTimeInterval    GetMachAbsoluteTimeInSeconds()      { return (CFTimeInterval)(double)(clock_gettime_nsec_np(CLOCK_UPTIME_RAW) / 1e9); }
 
 // Forward Declarations
 static void ImGui_ImplOSX_InitPlatformInterface();
@@ -376,6 +376,18 @@ static ImGuiKey ImGui_ImplOSX_KeyCodeToImGuiKey(int key_code)
     }
 }
 
+#ifdef IMGUI_IMPL_METAL_CPP_EXTENSIONS
+
+IMGUI_IMPL_API bool ImGui_ImplOSX_Init(void* _Nonnull view) {
+    return ImGui_ImplOSX_Init((__bridge NSView*)(view));
+}
+
+IMGUI_IMPL_API void ImGui_ImplOSX_NewFrame(void* _Nullable view) {
+    return ImGui_ImplOSX_NewFrame((__bridge NSView*)(view));
+}
+
+#endif
+
 
 bool ImGui_ImplOSX_Init(NSView* view)
 {
@@ -541,10 +553,10 @@ static void ImGui_ImplOSX_UpdateGamepads()
 #if APPLE_HAS_BUTTON_OPTIONS
     MAP_BUTTON(ImGuiKey_GamepadBack,            buttonOptions);
 #endif
-    MAP_BUTTON(ImGuiKey_GamepadFaceDown,        buttonA);              // Xbox A, PS Cross
-    MAP_BUTTON(ImGuiKey_GamepadFaceRight,       buttonB);              // Xbox B, PS Circle
     MAP_BUTTON(ImGuiKey_GamepadFaceLeft,        buttonX);              // Xbox X, PS Square
+    MAP_BUTTON(ImGuiKey_GamepadFaceRight,       buttonB);              // Xbox B, PS Circle
     MAP_BUTTON(ImGuiKey_GamepadFaceUp,          buttonY);              // Xbox Y, PS Triangle
+    MAP_BUTTON(ImGuiKey_GamepadFaceDown,        buttonA);              // Xbox A, PS Cross
     MAP_BUTTON(ImGuiKey_GamepadDpadLeft,        dpad.left);
     MAP_BUTTON(ImGuiKey_GamepadDpadRight,       dpad.right);
     MAP_BUTTON(ImGuiKey_GamepadDpadUp,          dpad.up);
